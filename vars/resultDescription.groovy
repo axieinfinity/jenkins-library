@@ -25,21 +25,22 @@ String call(RunWrapper currentBuild, boolean withPreviousResult = true) {
     description
 }
 
-String getDescription(String result, boolean withEmoji = false) {
-    String description = result.toLowerCase().capitalize()
+String getDescription(Result result, boolean withEmoji = false) {
+    String description = result.toString().toLowerCase().capitalize()
 
     if (withEmoji) {
         switch (result) {
-            // This is to avoid using static methods,
-            // normally we can just do `Result.fromString` and match directly,
-            // but it is restricted in sandboxing builds.
-            case Result.SUCCESS.toString(): return "$description 🎉"
-            case Result.UNSTABLE.toString(): return "$description 🙃"
-            case Result.FAILURE.toString(): return "$description 😢"
-            case Result.ABORTED.toString(): return "$description 😔"
+            case Result.SUCCESS: return "$description 🎉"
+            case Result.UNSTABLE: return "$description 🙃"
+            case Result.FAILURE: return "$description 😢"
+            case Result.ABORTED: return "$description 😔"
             default: return "$description 😐"
         }
     }
 
     description
+}
+
+String getDescription(String result, boolean withEmoji = false) {
+    getDescription(Result.fromString(result), withEmoji)
 }
