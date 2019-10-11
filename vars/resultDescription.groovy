@@ -1,10 +1,13 @@
 import hudson.model.Result
 import org.jenkinsci.plugins.workflow.support.steps.build.RunWrapper
 
-String call(RunWrapper currentBuild, boolean withPreviousResult = true) {
+String call(Map parameters = [:]) {
+    RunWrapper currentBuild = parameters.build ?: currentBuild
+    boolean suppressPrevious = parameters.suppressPrevious ?: false
+
     String description = getDescription(currentBuild.currentResult, true)
 
-    if (withPreviousResult) {
+    if (!suppressPrevious) {
         RunWrapper previousBuild = currentBuild.previousBuild
 
         while (previousBuild && !previousBuild.result) {
