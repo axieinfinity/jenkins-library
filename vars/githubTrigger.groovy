@@ -14,7 +14,7 @@ void call(Map parameters = [:]) {
                     [key: 'action', value: '$.action'],
                     [key: 'org', value: '$.organization.login'],
                     [key: 'repo', value: '$.repository.name'],
-                    // `issue_*` and `pr_*` keys are mutually exlusive.
+                    // `issue_*` and `pr_*` keys are mutually exclusive.
                     [key: 'issue_id', value: '$.issue.number', defaultValue: ''],
                     [key: 'issue_state', value: '$.issue.state', defaultValue: ''],
                     [key: 'issue_comment', value: '$.comment.body', defaultValue: ''],
@@ -25,6 +25,7 @@ void call(Map parameters = [:]) {
                 ],
                 regexpFilterText: '$org/$repo/PR-$issue_id$pr_id:$issue_state$pr_state:$x_github_event:$action:$issue_comment$pr_review_state',
                 regexpFilterExpression: "(?i)$JOB_NAME:open:(issue_comment:(created|edited):.*\\bretest this\\b.*|pull_request_review:submitted:approved)",
+                causeString: 'Pull request #$issue_id$pr_id triggered ($x_github_event)',
             ]]),
         ])
     }
