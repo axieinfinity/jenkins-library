@@ -21,7 +21,7 @@ String call(Map parameters = [:]) {
 
             String previousUrl = RUN_DISPLAY_URL.replaceAll('/[0-9]+/display/redirect', "/$previousBuild.number/display/redirect")
 
-            description = "**$description** ($previousDescription [previous build](${previousUrl}))"
+            description = "**$description** the ($previousDescription [previous build](${previousUrl}))"
         }
     }
 

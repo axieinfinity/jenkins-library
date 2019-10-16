@@ -9,24 +9,24 @@ void call(Closure body) {
 
             if (GIT_PREVIOUS_SUCCESSFUL_COMMIT == GIT_COMMIT) {
                 try {
-                    println 'The current commit has passed checks previously, now merge the pull request.'
+                    println 'The current commit has passed checks previously, now merge the pull request'
                     squashAndMerge(org, repo, pr_id, pr_title)
                     isMerged = true
                 } catch (exception) {
                     println "Got exception while trying to merge: ${hudson.Functions.printThrowable(exception)}"
                 }
             } else {
-                println 'The current commit has not passed checks previously, so ignore.'
+                println 'The current commit has not passed checks previously, so ignore'
             }
 
             if (!isMerged) {
                 String previousResult = currentBuild.previousBuild.result
 
                 if (previousResult) {
-                    println "The pull request was not merged, set build result to ${previousResult} based on the previous build..."
+                    println "The pull request was not merged, set build result to ${previousResult} based on the previous build"
                     currentBuild.result = previousResult
                 } else {
-                    println 'The pull request was not merged, set build result to UNSTABLE...'
+                    println 'The pull request was not merged, set build result to UNSTABLE'
                     currentBuild.result = 'UNSTABLE'
                 }
             }
@@ -52,7 +52,7 @@ void call(Closure body) {
 
                         for (review in reviews) {
                             if (review.state == 'APPROVED') {
-                                println 'We have at least one pull request approval, now merge the pull request.'
+                                println 'We have at least one pull request approval, now merge the pull request'
                                 squashAndMerge(org, repo, CHANGE_ID, CHANGE_TITLE)
                                 break;
                             }
@@ -75,10 +75,10 @@ List getOrgAndRepo(String prUrl) {
 }
 
 void squashAndMerge(String org, String repo, String prId, String prTitle) {
-    println 'Prematurely notify GitHub that this build is successful, so its check can be shown as success in merge'
+    println 'Prematurely notify GitHub that this build is successful, so its check can be shown as a success in the upcoming merge'
     githubSetStatus()
 
-    println 'Squash and merge the pull request...'
+    println 'Squash and merge the pull request'
     githubRequest(
         endpoint: "/repos/$org/$repo/pulls/$prId/merge",
         method: 'PUT',
