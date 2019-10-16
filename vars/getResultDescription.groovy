@@ -5,7 +5,7 @@ String call(Map parameters = [:]) {
     RunWrapper currentBuild = parameters.build ?: currentBuild
     boolean suppressPrevious = parameters.suppressPrevious ?: false
 
-    String description = getDescription(currentBuild.currentResult, true)
+    String description = "**${getDescription(currentBuild.currentResult, true)}**"
 
     if (!suppressPrevious) {
         RunWrapper previousBuild = currentBuild.previousBuild
@@ -21,7 +21,7 @@ String call(Map parameters = [:]) {
 
             String previousUrl = RUN_DISPLAY_URL.replaceAll('/[0-9]+/display/redirect', "/$previousBuild.number/display/redirect")
 
-            description = "**$description** the ($previousDescription [previous build]($previousUrl))"
+            description = "$description ($previousDescription the [previous build]($previousUrl))"
         }
     }
 
