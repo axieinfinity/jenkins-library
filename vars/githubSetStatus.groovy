@@ -22,11 +22,11 @@ String getDefaultContext() {
 
     if (head instanceof PullRequestSCMHead) {
         if (((PullRequestSCMHead) head).isMerge()) {
-            "continuous-integration/jenkins/pr-merge"
+            'continuous-integration/jenkins/pr-merge'
         } else {
-            "continuous-integration/jenkins/pr-head"
+            'continuous-integration/jenkins/pr-head'
         }
     } else {
-        "continuous-integration/jenkins/branch"
+        'continuous-integration/jenkins/branch'
     }
 }
