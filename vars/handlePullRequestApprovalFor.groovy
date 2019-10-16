@@ -23,7 +23,7 @@ void call(Closure body) {
                 String previousResult = currentBuild.previousBuild.result
 
                 if (previousResult) {
-                    println "The pull request was not merged, set build result to ${previousResult} based on the previous build"
+                    println "The pull request was not merged, set build result to $previousResult based on the previous build"
                     currentBuild.result = previousResult
                 } else {
                     println 'The pull request was not merged, set build result to UNSTABLE'
