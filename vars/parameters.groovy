@@ -1,3 +1,8 @@
+/* 
+  author: namcxn
+  date: Mar 02 00:00:00 +07 2021
+ */
+
 public inputParametersTest() {
     def parameters = [
             string(name: 'aws_region', defaultValue: "us-east-1"),
