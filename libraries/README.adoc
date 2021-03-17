@@ -1,5 +1,25 @@
-# Skymavis library for Jenkins CICD
+Skymavis library for Jenkins CICD
 
-You can find detailed information about all of these libraries here: 
+You can find detailed information about all of these libraries here: [linlk](https://www.jenkins.io/blog/2019/05/09/templating-engine/)
 
-# How to use
+== What is JTE?
+
+Organizations benefit from letting application developers focus on what they do best: building applications. Supporting this means building a centralized DevOps team responsible for maintaining platform infrastructure and creating CI/CD pipelines utilized by development teams.
+
+With the rise of microservice-based architectures, a centralized DevOps teams can support many different development teams simultaneously; all of whom may be leveraging different programming languages and automated testing tools.
+
+Example Pipeline Template:
+```
+agent {
+  on_pull_request to: main, {
+    in_dir in: "graphql/*/.*.rs", {
+      sh "Runing everywher in step"
+      build()
+      deploy_to_gke cluster_dev
+    }
+  }
+}
+```
+on_* steps example: on_commit, on_pull_request, on_merge, on_pull_request, on_merge
+
+`Note: Read code more detailed. Happy coding =))`
