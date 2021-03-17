@@ -45,7 +45,7 @@ def call(){
         findFiles(glob: pathDockerfile).collect{ it.path.split("/")[-1].split("[.]")[0]}.each { service ->
           String img_name_default = "${JOB_NAME}".split("/").first()
           // debug
-          String service_name = (service == "Dockerfile") ? $img_name_default : service
+          String service_name = (service == "Dockerfile") ? img_name_default : service
 
           images.push([
             registry: image_reg,
