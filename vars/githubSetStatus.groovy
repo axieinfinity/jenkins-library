@@ -7,6 +7,7 @@ import org.jenkinsci.plugins.github_branch_source.PullRequestSCMHead
 
 void call(Map parameters = [:]) {
     githubNotify(
+        /* groovylint-disable-next-line UnnecessaryGetter */
         context: parameters.context ?: getDefaultContext(),
         status: parameters.status ?: currentBuild.currentResult,
         description: parameters.description ?: currentBuild.description,
@@ -20,6 +21,7 @@ String getDefaultContext() {
     SCMRevision revision = src != null ? SCMRevisionAction.getRevision(src, build) : null
     SCMHead head = revision != null ? revision.head : null
 
+    /* groovylint-disable-next-line Instanceof */
     if (head instanceof PullRequestSCMHead) {
         if (((PullRequestSCMHead) head).isMerge()) {
             'continuous-integration/jenkins/pr-merge'

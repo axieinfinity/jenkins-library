@@ -19,16 +19,5 @@ void call(Map parameters, Closure body) {
         }
     } { Exception exception ->
         throw exception
-    } {
-        /* groovylint-disable-next-line UnnecessaryGetter */
-        if (!isPullRequestApproval()) {
-            discordMessage(
-                title: "$JOB_NAME${env.CHANGE_TITLE ? ": $CHANGE_TITLE" : ''}",
-                link: RUN_DISPLAY_URL,
-                description: getResultDescription(),
-                footer: 'Takes ' + currentBuild.durationString.replace(' and counting', ''),
-                result: currentBuild.currentResult,
-            )
-        }
     }
 }
