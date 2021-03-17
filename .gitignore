@@ -1,1 +1,16 @@
+target
+_build
+.idea
+.vscode
+.project
+.gradle 
+.settings
+.classpath
+*.iml
+build 
+bin
+**/*.bak
+docs/html
+docs/node_modules
 .DS_Store
+sdp-libraries
