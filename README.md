@@ -1,4 +1,4 @@
 # jenkins-library
 
-### Use librarie template
+### Use libraries template
 [Link to Docs!](libraries/README.adoc)
