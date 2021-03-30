@@ -12,6 +12,7 @@ void call(Closure body, Closure c4tch = null) {
   podTemplate(cloud: 'kubernetes', containers: [
     containerTemplate(name: 'docker-dind-gcloud', image: 'axieinfinity/axie-docker-dind-gcloud:latest', ttyEnabled: true, privileged: true, command: 'cat'),
     containerTemplate(name: 'helm-gcloud', image: 'axieinfinity/axie-helm3-gcloud:latest', ttyEnabled: true, privileged: true, command: 'cat'),
+    containerTemplate(name: 'node-wallet', image: 'axieinfinity/node-wallet:10.24-wallet', ttyEnabled: true, privileged: true, command: 'cat'),
   ],
   volumes: [
     emptyDirVolume(mountPath: "/var/lib/docker", memory: false),
