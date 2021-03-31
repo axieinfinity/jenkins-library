@@ -19,6 +19,9 @@ void call(app_env) {
                          {error "SSH credentail not found"}()
     String user_name = app_env.ssh_user ?:
                        config.ssh_user ?: "deploy"
+
+    String cmd_release = app_env.cmd_release ?:
+                        {error "Not found environment"} 
     // JSch does not support OpenSSH key format.
     // just the following command: ssh-keygen -p -m pem -f id_rsa
     withCredentials([sshUserPrivateKey(credentialsId: ssh_credential,
@@ -36,18 +39,18 @@ void call(app_env) {
           for test/debug
           sshCommand remote: remote, command: 'uname -r'
         */
-        this.command_release remote
+        this.command_release remote, cmd_release
       }
     }
   }
 }
 
-void command_release(remote) {
+void command_release(remote, cmd_release) {
   def images = get_images_to_build()
 
   images.each{ img ->
     
-    String docker_command = "${config.cmd_release} ${img.registry}/${img.repo}:${img.tag}"
+    String docker_command = "${cmd_release} ${img.registry}/${img.repo}:${img.tag}"
     sshCommand remote: remote, command: "${docker_command}"
   }  
 
