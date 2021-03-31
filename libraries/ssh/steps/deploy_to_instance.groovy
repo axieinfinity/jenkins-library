@@ -32,8 +32,11 @@ void call(app_env) {
       String release = config.method_release ?: "command"
       if ( release == "command") {
         echo "Release to ${app_env}"
-        sshCommand remote: remote, command: 'uname -r'
-        //command_release()
+        /*
+          for test/debug
+          sshCommand remote: remote, command: 'uname -r'
+        */
+        command_release()
       }
     }
   }
@@ -44,10 +47,10 @@ void command_release() {
 
   images.each{ img ->
     
-  }
-  String docker_command = 
+    String docker_command = "${config.cmd_release} ${img.registry}/${img.repo}:${img.tag}"
+    sshCommand remote: remote, command: "${docker_command}"
+  }  
 
-  sshCommand remote: remote, command: "${docker_command}"
 }
 
 void execute_release() {
