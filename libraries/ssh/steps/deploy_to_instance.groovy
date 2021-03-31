@@ -21,7 +21,10 @@ void call(app_env) {
                        config.ssh_user ?: "deploy"
 
     String cmd_release = app_env.cmd_release ?:
-                        {error "Not found environment"} 
+                        {error "Not found command relaease"}
+
+    String cmd_purge = app_env.cmd_purge ?:
+                       {error "Not found command purge container"}
     // JSch does not support OpenSSH key format.
     // just the following command: ssh-keygen -p -m pem -f id_rsa
     withCredentials([sshUserPrivateKey(credentialsId: ssh_credential,
@@ -39,10 +42,15 @@ void call(app_env) {
           for test/debug
           sshCommand remote: remote, command: 'uname -r'
         */
+        this.purge_container remote, cmd_purge
         this.command_release remote, cmd_release
       }
     }
   }
+}
+
+void purge_container(remote, cmd_purge){
+  sshCommand remote: remote, command: cmd_purge
 }
 
 void command_release(remote, cmd_release) {
