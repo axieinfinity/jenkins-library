@@ -36,13 +36,13 @@ void call(app_env) {
           for test/debug
           sshCommand remote: remote, command: 'uname -r'
         */
-        command_release()
+        this.command_release remote
       }
     }
   }
 }
 
-void command_release() {
+void command_release(remote) {
   def images = get_images_to_build()
 
   images.each{ img ->
