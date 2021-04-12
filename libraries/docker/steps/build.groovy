@@ -26,7 +26,7 @@ void call(){
         images.each{ img ->
           if (config.build_strategy == "multi") {
             //sh "docker build ${img.context} -f ${config.path_dockerfile} -t ${img.registry}/${img.repo}:${img.tag} ${args}" 
-            sh "docker build ${img.context} -f ${config.path_dockerfile} -t ${img.registry}/${img.repo}:${img.tag} ${args}" 
+            sh "DOCKER_BUILDKIT=1 docker build ${img.context} -f ${config.path_dockerfile} -t ${img.registry}/${img.repo}:${img.tag} ${args} --ssh default" 
           } else {
             sh "docker build ${img.context} -t ${img.registry}/${img.repo}:${img.tag} ${args}"
           }
