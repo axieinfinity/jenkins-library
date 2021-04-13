@@ -1,6 +1,5 @@
-*Full example using keywords*
-[source,groovy]
----
+## *Full example using keywords*
+```groovy
 on_commit{
   github_status("connection1", "service-account", "running")
   continuous_integration()
@@ -26,4 +25,4 @@ on_merge to: master, from: develop, {
   smoke_test()
   github_status("connection", "service-account2", "success")
 }
----
+```
