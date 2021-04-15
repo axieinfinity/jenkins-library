@@ -13,7 +13,7 @@ void call(Map parameters, Closure body) {
         // githubAddTrigger()
 
         podTemplate(parameters) {
-            githubSetStatus(status: 'PENDING', description: 'Waiting for Kubernetes build pod to be available')
+            // githubSetStatus(status: 'PENDING', description: 'Waiting for Kubernetes build pod to be available')
             node(POD_LABEL) {
                body()
             }
