@@ -10,7 +10,7 @@ import hudson.model.Result
 
 void call(Map parameters, Closure body) {
   handleException {
-        githubAddTrigger()
+        // githubAddTrigger()
 
         podTemplate(parameters) {
             githubSetStatus(status: 'PENDING', description: 'Waiting for Kubernetes build pod to be available')
