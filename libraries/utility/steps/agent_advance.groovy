@@ -9,10 +9,11 @@ import org.jenkinsci.plugins.workflow.steps.FlowInterruptedException
 import hudson.model.Result
 
 void call(Map parameters, Closure body) {
+  def label = "label-${UUID.randomUUID().toString()}"
   handleException {
         // githubAddTrigger()
 
-        podTemplate(parameters) {
+        podTemplate(label) {
             // githubSetStatus(status: 'PENDING', description: 'Waiting for Kubernetes build pod to be available')
             node(POD_LABEL) {
                body()
