@@ -12,9 +12,9 @@ void call(Map parameters, Closure body, Closure c4tch = null) {
   def label = "label-${UUID.randomUUID().toString()}"
 
   try {
-        podTemplate(label) {
+        podTemplate(parameters) {
             // githubSetStatus(status: 'PENDING', description: 'Waiting for Kubernetes build pod to be available')
-            node(POD_LABEL) {
+            node(label) {
                body()
             }
         }
