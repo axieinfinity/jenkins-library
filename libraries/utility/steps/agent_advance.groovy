@@ -9,7 +9,7 @@ import org.jenkinsci.plugins.workflow.steps.FlowInterruptedException
 import hudson.model.Result
 
 void call(Map parameters, Closure body, Closure c4tch = null) {
-    def label = "label-${UUID.randomUUID().toString()}"
+    def label = "${JOB_NAME}-${UUID.randomUUID().toString()}"
     podTemplate(parameters) {
         node(POD_LABEL) {
             try {
