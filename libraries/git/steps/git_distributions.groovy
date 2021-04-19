@@ -45,7 +45,9 @@ void init_env(){
             println "scm var not present, skipping source code checkout" 
         }catch(err){
           println "exception ${err}" 
-        } 
+        }
+        
+        // stash name: 'workspace', allowEmpty: true, useDefaultExcludes: false
 
         env.GIT_URL = scm.getUserRemoteConfigs()[0].getUrl()
         env.GIT_CREDENTIAL_ID = scm.getUserRemoteConfigs()[0].credentialsId.toString()

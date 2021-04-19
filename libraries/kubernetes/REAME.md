@@ -1,6 +1,6 @@
 **Example**
 
-```
+```groovy
 libraries {
   kubernetes
 }

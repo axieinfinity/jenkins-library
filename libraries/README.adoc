@@ -20,6 +20,49 @@ agent {
   }
 }
 ```
+or with agnet input yaml
+```
+agent_advance(yaml: """
+spec:
+  containers:
+  - command:
+    - "cat"
+    image: "axieinfinity/axie-docker-dind-gcloud:latest"
+    name: "docker-dind-gcloud"
+    resources:
+      limits: {}
+      requests: {}
+    securityContext:
+      privileged: true
+    tty: true
+    volumeMounts:
+    - mountPath: "/root/.gcloud"
+      name: "volume-2"
+      readOnly: false
+    - mountPath: "/var/lib/docker"
+      name: "volume-0"
+      readOnly: false
+    - mountPath: "/var/run/docker.sock"
+      name: "volume-1"
+      readOnly: false
+    - mountPath: "/home/jenkins/agent"
+      name: "workspace-volume"
+      readOnly: false
+  volumes:
+  - emptyDir:
+      medium: ""
+    name: "volume-0"
+  - configMap:
+      name: "helm-secrets-confimap"
+    name: "volume-2"
+  - hostPath:
+      path: "/var/run/docker.sock"
+    name: "volume-1"
+  - emptyDir:
+      medium: ""
+    name: "workspace-volume"
+""") {...}
+```
 on_* steps example: on_commit, on_pull_request, on_merge, on_pull_request, on_merge
 
 `Note: Read code more detailed. Happy coding =))`

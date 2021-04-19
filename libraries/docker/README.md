@@ -1,7 +1,6 @@
-== Example Configuration Snippet
+## Example Configuration Snippet
 
-[source,groovy]
-----
+```groovy
 libraries{
   docker {
     build_strategy = "dockerfile"
@@ -18,4 +17,4 @@ libraries{
     }
   }
 }
-----
+```
