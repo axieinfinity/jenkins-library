@@ -91,8 +91,8 @@ public class GitDistributionsSpec extends JTEPipelineSpecification {
       GitDistributions()
     then:
       2 * getPipelineMock("scm.getUserRemoteConfigs")() >> { [getPipelineMock("ScmUserRemoteConfig")] }
-      1 * getPipelineMock("ScmUserRemoteConfig.getUrl")() >> "https://github.com/boozallen/jenkins-templating-engine.git"
-      GitDistributions.getBinding().variables.env.GIT_URL == "https://github.com/boozallen/jenkins-templating-engine.git"
+      1 * getPipelineMock("ScmUserRemoteConfig.getUrl")() >> "https://github.com/axieinfinity/jenkins-templating-engine.git"
+      GitDistributions.getBinding().variables.env.GIT_URL == "https://github.com/axieinfinity/jenkins-templating-engine.git"
   }
 
   def "GIT_CREDENTIAL_ID env var is retreived from the scm object" () {
@@ -116,7 +116,7 @@ public class GitDistributionsSpec extends JTEPipelineSpecification {
     when:
       GitDistributions()
     then:
-      getPipelineMock("ScmUserRemoteConfig.getUrl")() >> "https://github.com/boozallen/library-test2.git"
+      getPipelineMock("ScmUserRemoteConfig.getUrl")() >> "https://github.com/axieinfinity/library-test2.git"
       GitDistributions.getBinding().variables.env.REPO_NAME == "library-test2"
   }
 
