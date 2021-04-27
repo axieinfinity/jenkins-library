@@ -13,6 +13,10 @@ import org.kohsuke.github.GitHub
     for example, in a MR from feature to development, the source branch
     would be "feature"
 */
+void call() [
+  this.get_source_branch
+]
+
 def get_source_branch(){
 
   def cred_id = env.GIT_CREDENTIAL_ID
