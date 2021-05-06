@@ -35,12 +35,13 @@ def hasChangesIn(String module) {
     // HEAD. Jenkins does not save this hash in an environment variable.
     def HEAD = sh(
         returnStdout: true,
-        script: "git show -s --no-abbrev-commit --pretty=format:%P%n%H%n HEAD | tr ' ' '\n' | grep -v ${target_branch} | head -n 1"
+        // script: "git show -s --no-abbrev-commit --pretty=format:%P%n%H%n HEAD | tr ' ' '\n' | grep -v ${target_branch} | head -n 1"
+        script: "git rev-parse origin/master"
     ).trim()
 
     return sh (
         returnStatus: true,
-        script: "git diff --name-only ${target_branch} ${HEAD} | grep -i ${module}"
+        script: "git diff --name-only ${target_branch} ${HEAD} | grep -i '${module}'"
     ) == 0
     // return result
 }
