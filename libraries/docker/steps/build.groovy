@@ -7,35 +7,36 @@ import com.cloudbees.plugins.credentials.Credentials
 
 void call(){
   stage "Building Docker Image", {
-    boolean remove_local_image = false
-    if (config.remove_local_image){
-        if (!(config.remove_local_image instanceof Boolean)){
-            error "remove_local_image must be a Boolean, received [${config.remove_local_image.getClass()}]"
-        }
-        remove_local_image = config.remove_local_image
-    }
 
-    // def exists = fileExists config.path_dockerfile
-    // if (exists) {
-    //   error "could not Dockerfile"
-    // }
-
-    login_to_registry{
-      def images = get_images_to_build()
-      withBuildArgs{ args ->
-        images.each{ img ->
-          if (config.build_strategy == "multi") {
-            //sh "docker build ${img.context} -f ${config.path_dockerfile} -t ${img.registry}/${img.repo}:${img.tag} ${args}" 
-            sh "DOCKER_BUILDKIT=1 docker build ${img.context} -f ${config.path_dockerfile} -t ${img.registry}/${img.repo}:${img.tag} ${args} --ssh default" 
-          } else {
-            sh "docker build ${img.context} -t ${img.registry}/${img.repo}:${img.tag} ${args}"
+    handleException {
+      
+      boolean remove_local_image = false
+      if (config.remove_local_image){
+          if (!(config.remove_local_image instanceof Boolean)){
+              error "remove_local_image must be a Boolean, received [${config.remove_local_image.getClass()}]"
           }
-          sh "docker push ${img.registry}/${img.repo}:${img.tag}"
-          if (remove_local_image) sh "docker rmi -f ${img.registry}/${img.repo}:${img.tag} 2> /dev/null"
+          remove_local_image = config.remove_local_image
+      }
+
+      login_to_registry{
+        def images = get_images_to_build()
+        withBuildArgs{ args ->
+          images.each{ img ->
+            if (config.build_strategy == "multi") {
+              //sh "docker build ${img.context} -f ${config.path_dockerfile} -t ${img.registry}/${img.repo}:${img.tag} ${args}" 
+              sh "DOCKER_BUILDKIT=1 docker build ${img.context} -f ${config.path_dockerfile} -t ${img.registry}/${img.repo}:${img.tag} ${args} --ssh default" 
+            } else {
+              sh "docker build ${img.context} -t ${img.registry}/${img.repo}:${img.tag} ${args}"
+            }
+            sh "docker push ${img.registry}/${img.repo}:${img.tag}"
+            if (remove_local_image) sh "docker rmi -f ${img.registry}/${img.repo}:${img.tag} 2> /dev/null"
+          }
         }
       }
+     } { Exception exception ->
+        // throw exception
+        gitPRComment()
     }
-
   }
 }
 
