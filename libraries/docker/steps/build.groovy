@@ -35,7 +35,6 @@ void call(){
       }
      } { Exception exception ->
         // throw exception
-        gitPRComment()
     }
   }
 }
