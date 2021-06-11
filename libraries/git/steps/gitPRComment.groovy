@@ -34,16 +34,13 @@ void call(){
                 ).trim()
         }
 
-        println "${commentID}"
-
         // If commentID found
         if (commentID) {
 
             withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
                 sh """
-                curl -s -H \"Authorization: Token ${GITHUB_TOKEN}\" \
-                -d '{ "query": "mutation { updateIssueComment(input: { id: \"${commentID}\" , body: \"${text_pr}\"}) { issueComment { updatedAt } } }" }' \
-                https://api.github.com/graphql
+                    curl -s -H \"Authorization: Token ${GITHUB_TOKEN}\" \
+                    -d '{ "query": "mutation { updateIssueComment(input: { id: \\"${commentID}\\" , body: \\"${text_pr}\\"}) { issueComment { updatedAt } } }" }' https://api.github.com/graphql
                 """
             }  
            
