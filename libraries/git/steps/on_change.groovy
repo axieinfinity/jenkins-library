@@ -15,5 +15,4 @@ void call(Map args = [:], body){
 
   println "running because of a commit to ${branch}"
   body()
-
 }

@@ -32,6 +32,7 @@ void call(){
             if (remove_local_image) sh "docker rmi -f ${img.registry}/${img.repo}:${img.tag} 2> /dev/null"
           }
         }
+        
       }
      } { Exception exception ->
         // throw exception

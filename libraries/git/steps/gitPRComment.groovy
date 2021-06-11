@@ -8,22 +8,20 @@ import hudson.model.*
 void call(){
     // Check if this is pull request
     if (env.CHANGE_TARGET){
-
+        def images = get_images_to_build()
+        def img = images[0]
         def repository_url = scm.userRemoteConfigs[0].url
         def repository_name = repository_url.replace("https://github.com/","").replace(".git","")
         def ghprbPullId = env.CHANGE_ID
-        def text_pr = "Jenkins job ${JOB_NAME} from [build ${BUILD_NUMBER}](${BUILD_URL}) status ```${currentBuild.currentResult}``` ."
-
+        def text_pr = "Jenkins job ```${JOB_NAME}``` from [build ${BUILD_NUMBER}](${BUILD_URL}) status ```${currentBuild.currentResult}``` ,  Docker Image for this build : ```${img.registry}/${img.repo}:${img.tag}``` . "
         def commentID
-
-        println "Repo name: ${repository_name} "
-        println "Github pull request ID : ${ghprbPullId} "
+        
         
         // get app repo
         def (repo_owner, repo_name) = repository_name.tokenize('/')
 
         // Find status comment
-        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+        withCredentials([string(credentialsId: 'kotarobot', variable: 'GITHUB_TOKEN')]) {
             commentID = sh (
                 script: """
                         curl -s -H \"Authorization: Token ${GITHUB_TOKEN}\" \
@@ -37,7 +35,7 @@ void call(){
         // If commentID found
         if (commentID) {
 
-            withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+            withCredentials([string(credentialsId: 'kotarobot', variable: 'GITHUB_TOKEN')]) {
                 sh """
                     curl -s -H \"Authorization: Token ${GITHUB_TOKEN}\" \
                     -d '{ "query": "mutation { updateIssueComment(input: { id: \\"${commentID}\\" , body: \\"${text_pr}\\"}) { issueComment { updatedAt } } }" }' https://api.github.com/graphql
@@ -46,8 +44,8 @@ void call(){
            
         } else {
             // If no, create the new one
-            withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                sh "curl -i -u huy-axie:${GITHUB_TOKEN} -X POST -d '{\"body\": \"${text_pr}\"}' \"https://api.github.com/repos/${repository_name}/issues/${ghprbPullId}/comments\""
+            withCredentials([string(credentialsId: 'kotarobot', variable: 'GITHUB_TOKEN')]) {
+                sh "curl -i -u kotarobot:${GITHUB_TOKEN} -X POST -d '{\"body\": \"${text_pr}\"}' \"https://api.github.com/repos/${repository_name}/issues/${ghprbPullId}/comments\""
             }
            
         }

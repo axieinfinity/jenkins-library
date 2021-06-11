@@ -21,5 +21,4 @@ void call(Map args = [:], body){
 
   println "running because of a PR from ${source_branch} to ${target_branch}"
   body()
-
 }
