@@ -7,7 +7,7 @@ import hudson.model.*
 // @CleanUp	
 void call(){
     // Check if this is pull request
-    if (env.CHANGE_TARGET){
+    if ((env.CHANGE_TARGET) && env.GIT_PR_VALID.toBoolean() ){
         def images = get_images_to_build()
         def img = images[0]
         def repository_url = scm.userRemoteConfigs[0].url
@@ -51,7 +51,8 @@ void call(){
         }
 
     } else {
-        println "Not a Pull request job, skipping..."
+        println "Pull request is not update with master, skipping..."
+        println "${env.GIT_PR_VALID}"
         return
     }
 }

@@ -64,6 +64,12 @@ void init_env(){
 
         if (env.CHANGE_TARGET){
             env.GIT_BUILD_CAUSE = "pr"
+            if (isUpdatedWithTarget()){
+                env.GIT_PR_VALID = true
+            }else{
+                env.GIT_PR_VALID = false
+            }
+
         } else {
             env.GIT_BUILD_CAUSE = sh (
               script: 'git rev-list HEAD --parents -1 | wc -w', // will have 2 shas if commit, 3 or more if merge
@@ -78,4 +84,18 @@ void init_env(){
 
 def fetch(){
     return getBinding().getStep(env.GIT_LIBRARY_DISTRUBITION)
+}
+
+
+// Check if Pull request update with target branch
+boolean isUpdatedWithTarget() {
+
+    String gitMergeBaseCommit = sh(script: "git merge-base remotes/origin/master remotes/origin/${BRANCH_NAME}", returnStdout: true).trim()
+
+    String headOrigin = sh(script: "git rev-parse remotes/origin/master", returnStdout: true).trim()
+
+    if (headOrigin.equals(gitMergeBaseCommit)){
+        return true
+    }
+    return false
 }
