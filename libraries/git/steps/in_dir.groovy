@@ -7,6 +7,11 @@ package libraries.git
 
 void call(Map args = [:], body) {
 
+  // Pre-check pull request to make sure hasChangesIn() working correctly.
+  if((env.CHANGE_TARGET) && !env.GIT_PR_VALID.toBoolean() ){
+      println "WARNING: This PR is not update with master, please rebase."
+      return
+  }
   def dir_target = hasChangesIn(args.in)
 
   println "Running because get dir target is ${dir_target}"
