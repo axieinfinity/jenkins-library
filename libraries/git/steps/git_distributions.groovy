@@ -90,9 +90,9 @@ def fetch(){
 // Check if Pull request update with target branch
 boolean isUpdatedWithTarget() {
 
-    String gitMergeBaseCommit = sh(script: "git merge-base remotes/origin/master remotes/origin/${BRANCH_NAME}", returnStdout: true).trim()
+    String gitMergeBaseCommit = sh(script: "git merge-base remotes/origin/${env.CHANGE_TARGET} remotes/origin/${BRANCH_NAME}", returnStdout: true).trim()
 
-    String headOrigin = sh(script: "git rev-parse remotes/origin/master", returnStdout: true).trim()
+    String headOrigin = sh(script: "git rev-parse remotes/origin/${env.CHANGE_TARGET}", returnStdout: true).trim()
 
     if (headOrigin.equals(gitMergeBaseCommit)){
         return true
