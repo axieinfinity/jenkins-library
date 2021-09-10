@@ -24,9 +24,13 @@ void call(app_env) {
                       {error "k8s cluster not defined in library config or application environment config"}()
 
     def app_cred = app_env.app_cred ?:
-                  config.project_id ?:
+                  config.app_cred ?:
                   {error "k8s cluster not defined in library config or application environment config"}()
-                  
+
+    def app_cred_decrypt = app_env.app_cred_decrypt ?:
+                  config.app_cred_decrypt ?:
+                  {error "k8s cluster not defined in library config or application environment config"}()   
+
     def valuesPath = app_env.value_path ?:
                     {error "k8s cluster not defined in library config or application environment config"}()
     /*
@@ -62,7 +66,7 @@ void call(app_env) {
                                   helm repo add skymavis https://charts.skymavis.one
                                   helm repo update
                                   '''
-      sh "export GOOGLE_APPLICATION_CREDENTIALS=${app_cred} && helm secrets upgrade --atomic --install ${release} skymavis/${release} --version ${chart_ver} --namespace ${env} --set-string image.repository=${img.registry}/${img.repo} --set-string image.tag=${img.tag} -f ${valuesPath}/values.yaml -f ${valuesPath}/secrets.yaml"
+      sh "export GOOGLE_APPLICATION_CREDENTIALS=${app_cred_decrypt} && helm secrets upgrade --atomic --install ${release} skymavis/k8s-service --version ${chart_ver} --namespace ${env} --set-string image.repository=${img.registry}/${img.repo} --set-string image.tag=${img.tag} -f ${valuesPath}/values.yaml -f ${valuesPath}/secrets.yaml"
       }
   }
 
