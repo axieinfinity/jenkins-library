@@ -66,7 +66,7 @@ void call(app_env) {
                                   helm repo add skymavis https://charts.skymavis.one
                                   helm repo update
                                   '''
-      sh "export GOOGLE_APPLICATION_CREDENTIALS=${app_cred_decrypt} && helm secrets upgrade --atomic --install ${release} skymavis/k8s-service --version ${chart_ver} --namespace ${env} --set containerImage.repository=${img.registry}/${img.repo} --set containerImage.tag=${img.tag} -f ${valuesPath}/values.yaml -f ${valuesPath}/secrets.yaml"
+      sh "export GOOGLE_APPLICATION_CREDENTIALS=${app_cred_decrypt} && helm secrets upgrade --atomic --install --debug ${release} skymavis/k8s-service --version ${chart_ver} --namespace ${env} --set containerImage.repository=${img.registry}/${img.repo} --set containerImage.tag=${img.tag} -f ${valuesPath}/values.yaml -f ${valuesPath}/secrets.yaml"
       }
   }
 
