@@ -38,15 +38,28 @@ def hasChangesIn(String module) {
     // not change. If it is not a fast-forward merge, a new commit becomes HEAD
     // so we check for the non-master parent commit hash to get the original
     // HEAD. Jenkins does not save this hash in an environment variable.
-    def HEAD = sh(
-        returnStdout: true,
-        // script: "git show -s --no-abbrev-commit --pretty=format:%P%n%H%n HEAD | tr ' ' '\n' | grep -v ${target_branch} | head -n 1"
-        script: "git rev-parse origin/master"
-    ).trim()
 
-    return sh (
+    // If this is a pull request
+    if(env.CHANGE_TARGET){
+
+      // branch pull request want to merge.
+      def dest_branch = env.CHANGE_TARGET
+
+      def HEAD = sh(
+        returnStdout: true,
+        script: "git rev-parse origin/${dest_branch}"
+      ).trim()
+
+      return sh (
         returnStatus: true,
         script: "git diff --name-only ${target_branch} ${HEAD} | grep -i '${module}'"
-    ) == 0
-    // return result
+      ) == 0
+    
+    // If this is not a pull request
+    }else{
+      return sh (
+        returnStatus: true,
+        script: "git diff --name-only ${target_branch} ${target_branch} | grep -i '${module}'"
+      ) == 0
+    }
 }
