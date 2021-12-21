@@ -49,7 +49,12 @@ void call(app_env) {
     def chart_ver = app_env.release_ver ?:
                     "0.0.1" ?:
                     {error "App Env Must Specify release_ver"}()
-
+    /*
+      Pre yaml apply
+    */
+    def additionalYaml = app_env.add_yaml ?:
+                    " " ?:
+                    {error "App Env Must Specify add_yaml"}()
     /*
         // k8s context
     def k8s_context = app_env.k8s_context ?:
@@ -61,6 +66,17 @@ void call(app_env) {
     images.each { img ->
       sh "gcloud auth activate-service-account --key-file=${app_cred}"
       sh "gcloud container clusters get-credentials ${cluster_name} --zone ${cluster_zone} --project ${project_id}"
+
+      // Check if we need to add addtitional yaml
+      if (isYamlExists("${additionalYaml}")){
+        def listYaml = additionalYaml.tokenize( ',' )
+        
+        listYaml.each { yaml ->
+          sh "kubectl apply -f ${yaml}"
+        }
+      }
+
+      // Deploy application
       sh label: 'Deploy to development', script: '''
                                   kubectl cluster-info
                                   helm repo add skymavis https://charts.skymavis.one
@@ -70,4 +86,13 @@ void call(app_env) {
       }
   }
 
+}
+
+// Pre check yaml
+boolean isYamlExists(filePath) {
+  // not null
+  if (filePath?.trim()) {
+    return true
+  }
+  return false
 }
