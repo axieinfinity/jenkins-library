@@ -41,7 +41,8 @@ def hasChangesIn(String module) {
     def HEAD = sh(
         returnStdout: true,
         // script: "git show -s --no-abbrev-commit --pretty=format:%P%n%H%n HEAD | tr ' ' '\n' | grep -v ${target_branch} | head -n 1"
-        script: "git rev-parse origin/master"
+        // verify repo use branch master or branch main
+        script: "if [[ \$(git rev-parse --verify --quiet origin/master) ]]; then (git rev-parse origin/master); else (git rev-parse origin/main); fi"
     ).trim()
 
     return sh (
