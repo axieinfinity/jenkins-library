@@ -10,8 +10,14 @@ void call(){
     handleException {
       if (config.path_dockerfile != "") {
         sh """
-          export base_images=`cat $config.path_dockerfile | grep FROM | awk '{print \$2}'`
-          for i in \$base_images; do docker pull \$i || true; done;
+          base_images=`cat $config.path_dockerfile | grep FROM | awk '{print \$2}'`
+          for i in \$base_images
+          do
+            img_id=`docker images -q \$i`
+            if [[ ! -n \$img_id ]]; then
+              docker pull \$i
+            fi
+          done
         """
       }
     } { Exception exception ->
