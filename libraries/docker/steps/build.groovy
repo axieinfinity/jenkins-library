@@ -11,7 +11,7 @@ void call(){
       if (config.path_dockerfile != "") {
         sh """
           export base_images=`cat $config.path_dockerfile | grep FROM | awk '{print \$2}'`
-          for i in \$base_images; do docker pull \$i; done;
+          for i in \$base_images; do docker pull \$i || true; done;
         """
       }
     } { Exception exception ->
