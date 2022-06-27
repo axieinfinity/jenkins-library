@@ -101,13 +101,15 @@ boolean isUpdatedWithTarget() {
 
 // Check if this is a tag
 boolean isTags() {
-    // Always return true
-    String currentTag = sh(script:"git describe --tags || true", returnStdout: true).trim()
 
-    String currtentBranch = env.BRANCH_NAME
+    String state = sh(script: "git tag -l ${BRANCH_NAME}", returnStdout: true).trim()
+    println "${state}"
 
-    if (currentTag.equals(currtentBranch)){
+    // check if state not null -> this is a tags
+    if (state?.trim()){
         return true
+    // else this is empty -> this is not a tags
+    }else {
+        return false
     }
-    return false
 }
