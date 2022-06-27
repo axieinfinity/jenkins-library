@@ -1,4 +1,4 @@
-/* 
+/*
   author: namcxn
   date: Mar 02 00:00:00 +07 2021
  */
@@ -15,7 +15,7 @@ void call(Map args = [:], body) {
   def dir_target = hasChangesIn(args.in)
 
   println "Running because get dir target is ${dir_target}"
-  
+
   // do nothing if dir !true
   if (args.in)
   if( dir_target == false )
