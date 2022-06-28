@@ -14,7 +14,7 @@ void call(){
           for i in \$base_images
           do
             img_id=`docker images -q \$i`
-            if [[ ! -n \$img_id ]]; then
+            if [[ -z \$img_id ]]; then
               docker pull \$i
             fi
           done
