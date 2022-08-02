@@ -8,20 +8,24 @@ import com.cloudbees.plugins.credentials.Credentials
 void call(){
   stage "Pre-pull images", {
     handleException {
-      login_to_registry{
         if (config.path_dockerfile != "") {
-          sh """
-            base_images=`cat $config.path_dockerfile | grep FROM | awk '{print \$2}'`
-            for i in \$base_images
-            do
-              img_id=`docker images -q \$i`
-              if [[ -z \$img_id ]]; then
-                docker pull \$i
-              fi
-            done
-          """
+          // check if base image is private
+          base = sh (
+            script: """cat $config.path_dockerfile | grep FROM | grep gcr""",
+            returnStdout: true
+          ).trim()
+
+          // check if base not null -> this is a private image, do login to registry
+          if (base?.trim()){
+            login_to_registry{
+              pre_pull(config.path_dockerfile)
+            }
+          // if base is null -> this is not a private image
+          }else {
+            pre_pull(config.path_dockerfile)
+          }
+
         }
-      }
     } { Exception exception ->
       // throw exception
     }
@@ -106,7 +110,7 @@ void withBuildArgs(Closure body){
 void validate_docker_build(){
 
   if(!config.containsKey("build_args")){
-    return 
+    return
   }
 
   if(!(config.build_args instanceof Map)){
@@ -118,19 +122,19 @@ void validate_docker_build(){
       switch(value?.type){
         case "credential": // validate credential exists and is a secrettext cred
           def allCreds = CredentialsProvider.lookupCredentials(Credentials, Jenkins.get(),null, null)
-          def cred = allCreds.find{ it.id.equals(value.id) } 
+          def cred = allCreds.find{ it.id.equals(value.id) }
           if(cred == null){
               error "docker library: build argument '${argument}' specified credential id '${value.id}' which does not exist."
           }
           if(!(cred instanceof StringCredentialsImpl)){
-            error "docker library: build argument '${argument}' credential must be a Secret Text." 
+            error "docker library: build argument '${argument}' credential must be a Secret Text."
           }
-          break; 
-        case null: // no build argument type provided 
+          break;
+        case null: // no build argument type provided
           error "docker library: build argument '${argument}' must specify a type"
           break;
-        default: // unrecognized argument type 
-          error "docker library: build argument '${argument}' type of '${value.type}' is not recognized"  
+        default: // unrecognized argument type
+          error "docker library: build argument '${argument}' type of '${value.type}' is not recognized"
       }
     }
   }
