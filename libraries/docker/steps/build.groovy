@@ -8,17 +8,19 @@ import com.cloudbees.plugins.credentials.Credentials
 void call(){
   stage "Pre-pull images", {
     handleException {
-      if (config.path_dockerfile != "") {
-        sh """
-          base_images=`cat $config.path_dockerfile | grep FROM | awk '{print \$2}'`
-          for i in \$base_images
-          do
-            img_id=`docker images -q \$i`
-            if [[ -z \$img_id ]]; then
-              docker pull \$i
-            fi
-          done
-        """
+      login_to_registry{
+        if (config.path_dockerfile != "") {
+          sh """
+            base_images=`cat $config.path_dockerfile | grep FROM | awk '{print \$2}'`
+            for i in \$base_images
+            do
+              img_id=`docker images -q \$i`
+              if [[ -z \$img_id ]]; then
+                docker pull \$i
+              fi
+            done
+          """
+        }
       }
     } { Exception exception ->
       // throw exception
@@ -28,7 +30,6 @@ void call(){
   stage "Building Docker Image", {
 
     handleException {
-      
       boolean remove_local_image = false
       if (config.remove_local_image){
           if (!(config.remove_local_image instanceof Boolean)){
@@ -51,7 +52,6 @@ void call(){
             if (remove_local_image) sh "docker rmi -f ${img.registry}/${img.repo}:${img.tag} 2> /dev/null"
           }
         }
-        
       }
      } { Exception exception ->
         // throw exception
