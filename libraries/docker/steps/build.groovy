@@ -11,7 +11,7 @@ void call(){
         if (config.path_dockerfile != "") {
           // check if base image is private
           base = sh (
-            script: """cat $config.path_dockerfile | grep FROM | grep gcr""",
+            script: """cat $config.path_dockerfile | grep FROM | grep gcr|| true""",
             returnStdout: true
           ).trim()
 
