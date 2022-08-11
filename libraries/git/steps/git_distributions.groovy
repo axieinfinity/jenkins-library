@@ -54,7 +54,10 @@ void init_env(){
 
         def target_branch_name = env.BRANCH_NAME
 
-       // Check if checking out a tags or a branch
+        // Pre checkout add safe directory
+        sh "git config --global --add safe.directory '*'"
+
+        // Check if checking out a tags or a branch
         if (isTags()){
             env.GIT_SHA = sh(script: "git rev-parse --short refs/tags/${target_branch_name}", returnStdout: true).trim()
         }else{
